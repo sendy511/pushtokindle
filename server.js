@@ -5,7 +5,9 @@ http.createServer(function(req, res) {
     res.writeHead(200, {'Content-Type': 'text/html'});
     var regex = /echostr=([^\&]*)/.exec(req.url);
     if(regex != null){
-    	res.write(regex[1]);
+    	var echoString = regex[1];
+    	console.log(echostr);
+    	res.write(echostr);
 	}
     res.end();
 
