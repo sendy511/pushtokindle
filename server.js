@@ -8,34 +8,37 @@ http.createServer(function(req, res) {
 
     res.writeHead(200, {'Content-Type': 'text/html'});
 
-	var body = '';
     
     if(req.method == 'POST'){
+		var body = '';
+    
     	req.on('data', function(data){
     		body += data;
     	});
 
     	req.on('end', function(){
     		console.log("Get POST request with content: " + body);
+
+    		xml2js.parseString(body, function(error, result){
+		        console.log("JSON:" + JSON.stringify(result));
+		        var url = result.xml.Content;
+		        console.log("url:" + url);
+
+		        var content;
+		        http.get("http://www.baidu.com", function(res){
+		            res.on('data', function(chunk){
+		                content += chunk;
+		            }).on('end', function(){
+		                // console.log(content);
+		            });
+		        })
+		    });
     	});
     }
     
     responseEchostr(req, res);
 
-    xml2js.parseString(body, function(error, result){
-        console.log("JSON:" + JSON.stringify(result));
-        var url = result.xml.Content;
-        console.log("url:" + url);
-
-        var content;
-        http.get("http://www.baidu.com", function(res){
-            res.on('data', function(chunk){
-                content += chunk;
-            }).on('end', function(){
-                // console.log(content);
-            });
-        })
-    });
+    
 
     res.end();
 
