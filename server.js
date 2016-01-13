@@ -1,5 +1,6 @@
 var http = require('http');
 var xml2js = require('xml2js');
+var querystring = require('querystring');
 
 var port = 18080;
 
@@ -8,37 +9,11 @@ http.createServer(function(req, res) {
 
     res.writeHead(200, {'Content-Type': 'text/html'});
 
-    
     if(req.method == 'POST'){
-		var body = '';
-    
-    	req.on('data', function(data){
-    		body += data;
-    	});
-
-    	req.on('end', function(){
-    		console.log("Get POST request with content: " + body);
-
-    		xml2js.parseString(body, function(error, result){
-		        console.log("JSON:" + JSON.stringify(result));
-		        var url = result.xml.Content;
-		        console.log("url:" + url);
-
-		        var content;
-		        http.get("http://www.baidu.com", function(res){
-		            res.on('data', function(chunk){
-		                content += chunk;
-		            }).on('end', function(){
-		                // console.log(content);
-		            });
-		        })
-		    });
-    	});
+		responseMessage(req);
     }
     
     responseEchostr(req, res);
-
-    
 
     res.end();
 
@@ -51,4 +26,59 @@ function responseEchostr(req, res){
     	console.log(echostr);
     	res.write(echostr);
 	}
+}
+
+function responseMessage(req){
+    var body = '';
+    
+    req.on('data', function(data){
+        body += data;
+    });
+
+    req.on('end', function(){
+        console.log("Get POST request with content: " + body);
+
+        xml2js.parseString(body, function(error, result){
+            console.log("JSON:" + JSON.stringify(result));
+            var url = result.xml.Content;
+            console.log("url:" + url);
+
+            createEbookParsingJob(url);
+        });
+    });
+}
+
+function createEbookParsingJob(url){
+    var api_address = "http://api2.online-convert.com";
+    var api_key = 'f0c315563b656b7d40101ac578fc289f';
+    var post_data = querystring({
+        "input": [{
+            "type": "remote",
+            "source": url
+        }],
+        "conversion": [{
+            "target": "mobi"
+        }]
+    })
+
+    var post_options = {
+        'host': api_address,
+        'path': "jobs",
+        'X-Oc-Api-Key': api_key,
+        'Content-Type': 'application/json'
+    }
+
+    var response_body = '';
+    var post_request = http.post(post_options, function(res){
+        res.setEncoding('utf-8');
+        res.on('data', function(chunk){
+            response_body += chunk;
+        })
+        res.on('end', function(){
+            console.log("Have create job for : " + url);
+            console.log(response_body);
+        })
+    });
+    post_request.write(post_data);
+    post_request.end();
 }
