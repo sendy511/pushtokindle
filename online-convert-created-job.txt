@@ -1,0 +1,44 @@
+{
+  "id": "6d9b67ab-ba05-11e5-a6e2-002590d8633c",
+  "token": "be81a94c37889958b9b636067bf7b987",
+  "type": "job",
+  "status": {
+    "code": "queued",
+    "info": "The file is waiting in the queue for being processed."
+  },
+  "process": true,
+  "conversion": [
+    {
+      "id": "6d9be893-ba05-11e5-a6e2-002590d8633c",
+      "target": "mobi",
+      "category": "ebook",
+      "options": {
+        "reader": null,
+        "title": null,
+        "author": null,
+        "border": null,
+        "encoding": null,
+        "ascii": false
+      }
+    }
+  ],
+  "input": [
+    {
+      "id": "6d9bbf04-ba05-11e5-a6e2-002590d8633c",
+      "type": "remote",
+      "source": "http://www.baidu.com",
+      "filename": "",
+      "size": 0,
+      "hash": "",
+      "content_type": "",
+      "created_at": "2016-01-13T15:53:38",
+      "modified_at": "2016-01-13T15:53:38"
+    }
+  ],
+  "output": [],
+  "callback": "",
+  "server": "https://www30.online-convert.com",
+  "spent": 0,
+  "created_at": "2016-01-13T15:53:38",
+  "modified_at": "2016-01-13T15:53:38"
+}

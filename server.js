@@ -1,7 +1,5 @@
 var http = require('http');
 var xml2js = require('xml2js');
-var querystring = require('querystring');
-var request = require('request');
 var JSON = require('JSON');
 
 var port = 18080;
@@ -53,7 +51,7 @@ function responseMessage(req){
 }
 
 function createEbookParsingJob(url){
-    var api_address = "http://api2.online-convert.com";
+    var api_address = "api2.online-convert.com";
     var api_key = 'f0c315563b656b7d40101ac578fc289f';
     var post_data = JSON.stringify({
         'input': [{
@@ -66,11 +64,14 @@ function createEbookParsingJob(url){
     });
     console.log("asdfa" + post_data);
     var post_options = {
-        'host': api_address,
-        'port': 80,
-        'path': "jobs",
-        'X-Oc-Api-Key': api_key,
-        'Content-Type': 'application/json'
+        method: 'POST',
+        host: api_address,
+        path: "/jobs",
+        headers:{
+            'X-Oc-Api-Key': api_key,
+            'Content-Type': 'application/json',
+            'Content-Length': post_data.length
+        }
     }
 
     var response_body = '';
@@ -80,7 +81,7 @@ function createEbookParsingJob(url){
             response_body += chunk;
         })
         res.on('end', function(){
-            console.log("Have create job for : " + url);
+            console.log("Pushed command to create job for : " + url);
             console.log(response_body);
         })
     });
