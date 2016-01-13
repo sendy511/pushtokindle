@@ -1,6 +1,8 @@
 var http = require('http');
 var xml2js = require('xml2js');
 var querystring = require('querystring');
+var request = require('request');
+var JSON = require('JSON');
 
 var port = 18080;
 
@@ -9,10 +11,12 @@ http.createServer(function(req, res) {
 
     res.writeHead(200, {'Content-Type': 'text/html'});
 
-    if(req.method == 'POST'){
-		responseMessage(req);
-    }
+  //   if(req.method == 'POST'){
+		// responseMessage(req);
+  //   }
     
+    createEbookParsingJob("http://www.baidu.com");
+
     responseEchostr(req, res);
 
     res.end();
@@ -51,25 +55,26 @@ function responseMessage(req){
 function createEbookParsingJob(url){
     var api_address = "http://api2.online-convert.com";
     var api_key = 'f0c315563b656b7d40101ac578fc289f';
-    var post_data = querystring({
-        "input": [{
-            "type": "remote",
-            "source": url
+    var post_data = JSON.stringify({
+        'input': [{
+            'type': 'remote',
+            'source': url
         }],
-        "conversion": [{
-            "target": "mobi"
+        'conversion': [{
+            'target': 'mobi'
         }]
-    })
-
+    });
+    console.log("asdfa" + post_data);
     var post_options = {
         'host': api_address,
+        'port': 80,
         'path': "jobs",
         'X-Oc-Api-Key': api_key,
         'Content-Type': 'application/json'
     }
 
     var response_body = '';
-    var post_request = http.post(post_options, function(res){
+    var post_request = http.request(post_options, function(res){
         res.setEncoding('utf-8');
         res.on('data', function(chunk){
             response_body += chunk;
