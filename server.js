@@ -3,6 +3,7 @@ var xml2js = require('xml2js');
 var JSON = require('JSON');
 var fs = require('fs');
 var url = require('url');
+var request = require('request');
 
 var port = 18080;
 
@@ -18,8 +19,8 @@ http.createServer(function(req, res) {
 		// responseMessage(req);
   //   }
     
-    //createEbookParsingJob("http://www.baidu.com");
-    whetherJobFinished("6d9b67ab-ba05-11e5-a6e2-002590d8633c");
+    createEbookParsingJob("http://www.baidu.com");
+    //whetherJobFinished("6d9b67ab-ba05-11e5-a6e2-002590d8633c");
 
     responseEchostr(req, res);
 
@@ -64,7 +65,7 @@ function createEbookParsingJob(content_url){
             'source': content_url
         }],
         'conversion': [{
-            'target': 'mobi'
+            'target': 'pdf'
         }]
     });
     console.log("asdfa" + post_data);
@@ -88,9 +89,11 @@ function createEbookParsingJob(content_url){
         res.on('end', function(){
             console.log("Pushed command to create job for : " + content_url);
             console.log(response_body);
-            if (response_body.contains("queued")){
-                var job_id = response_body.id;
-
+            var createdJob = JSON.parse(response_body);
+            if (createdJob){
+                var job_id = createdJob.id;
+                console.log("Get job id : " + job_id);
+                whetherJobFinished(job_id);
             }
             
         })
@@ -131,14 +134,8 @@ function whetherJobFinished(job_id){
 }
 
 function downloadFile(file_address){
-    var tmp_file = fs.createWriteStream("tmpfile");
-    http.get(file_address, function(res){
-        res.pipe(tmp_file);
-        tmp_file.on('finish', function(){
-            console.log("Write file into " + tmp_file);
-            tmp_file.close(sendEmail(tmp_file));
-        })
-    });
+    request(file_address).pipe(fs.createWriteStream("tmpfile"));
+    console.log("File download to local disk");
 }
 
 function sendEmail(file){
