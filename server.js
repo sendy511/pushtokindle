@@ -1,9 +1,10 @@
-var http = require('http');
+ http = require('http');
 var xml2js = require('xml2js');
 var JSON = require('JSON');
 var fs = require('fs');
 var url = require('url');
 var request = require('request');
+var nodemailer = require('nodemailer');
 
 var port = 18080;
 
@@ -19,8 +20,10 @@ http.createServer(function(req, res) {
 		// responseMessage(req);
   //   }
     
-    createEbookParsingJob("http://www.baidu.com");
+    //createEbookParsingJob("http://www.baidu.com");
     //whetherJobFinished("6d9b67ab-ba05-11e5-a6e2-002590d8633c");
+
+    sendEmail("tmp");
 
     responseEchostr(req, res);
 
@@ -140,4 +143,22 @@ function downloadFile(file_address){
 
 function sendEmail(file){
     console.log("will send email");
+
+    var transporter = nodemailer.createTransport('smtps://douyanseng%40163.com:1984224123@smtp.163.com');
+
+    var mailOptions = {
+        from: 'Yansen<douyanseng@163.com>',
+        to: 'douyanseng_53@iduokan.com', // list of receivers
+        subject: 'Hello', // Subject line
+        text: 'Hello world', // plaintext body
+        html: '<b>Hello world</b>', // html body
+        attachments:[{path:file}]
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if(error){
+            return console.log(error);
+        }
+        console.log('Message sent: ' + info.response);
+    });
 }
