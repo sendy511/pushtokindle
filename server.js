@@ -5,14 +5,15 @@ var fs = require('fs');
 var url = require('url');
 var request = require('request');
 var nodemailer = require('nodemailer');
+var tf = require('timeformatter')('en');
 
 var port = 18080;
 
 var api_address = "api2.online-convert.com";
 var api_key = 'f0c315563b656b7d40101ac578fc289f';
 
-var convert_file_format = "mobi";
-var saved_file_name = "tmpFile" + "." + convert_file_format;
+var convert_file_format = "pdf";
+var saved_file_name = tf.format("yyyyLLdd-HHmm") + "." + convert_file_format;
 
 http.createServer(function(req, res) {
     console.log(new Date() + req.url);

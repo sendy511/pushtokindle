@@ -10,6 +10,7 @@
     "JSON": "^1.0.0",
     "nodemailer": "^2.0.0",
     "request": "^2.67.0",
+    "timeformatter": "^0.1.6",
     "xml2js": "^0.4.15"
   }
 }
