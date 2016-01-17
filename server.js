@@ -54,7 +54,7 @@ function responseMessage(req){
 
         xml2js.parseString(body, function(error, result){
             console.log("JSON:" + JSON.stringify(result));
-            var url = result.xml.Content;
+            var url = result.xml.Content[0];
             console.log("url:" + url);
 
             createEbookParsingJob(url);
@@ -63,7 +63,6 @@ function responseMessage(req){
 }
 
 function createEbookParsingJob(content_url){
-    
     var post_data = JSON.stringify({
         'input': [{
             'type': 'remote',
@@ -73,7 +72,7 @@ function createEbookParsingJob(content_url){
             'target': convert_file_format
         }]
     });
-    console.log("asdfa" + post_data);
+    console.log("Create job http body: " + post_data);
     var post_options = {
         method: 'POST',
         host: api_address,
@@ -131,8 +130,8 @@ function whetherJobFinished(job_id){
                 downloadFile(download_address);
             }
             else{
-                console.log("Job " + job_id + " not finished yet, will try 3 seconds later");
-                setTimeout(whetherJobFinished(job_id), 3000);
+                console.log("Job " + job_id + " not finished yet, will try 10 seconds later");
+                setTimeout(whetherJobFinished(job_id), 10000);
             }
         });
     });
