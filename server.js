@@ -132,7 +132,7 @@ function whetherJobFinished(job_id){
             }
             else{
                 console.log("Job " + job_id + " not finished yet, will try 5 seconds later");
-                setTimeout('whetherJobFinished(' + job_id + ')', 5000);
+                setTimeout(function(){whetherJobFinished(job_id)}, 5000);
             }
         });
     });
