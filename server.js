@@ -131,8 +131,8 @@ function whetherJobFinished(job_id){
                 downloadFile(download_address);
             }
             else{
-                console.log("Job " + job_id + " not finished yet, will try 10 seconds later");
-                setTimeout(whetherJobFinished(job_id), 10000);
+                console.log("Job " + job_id + " not finished yet, will try 5 seconds later");
+                setTimeout('whetherJobFinished(' + job_id + ')', 5000);
             }
         });
     });
