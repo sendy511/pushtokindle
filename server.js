@@ -11,19 +11,21 @@ var port = 18080;
 var api_address = "api2.online-convert.com";
 var api_key = 'f0c315563b656b7d40101ac578fc289f';
 
+var convert_file_format = "mobi";
+var saved_file_name = "tmpFile" + "." + convert_file_format;
+
 http.createServer(function(req, res) {
     console.log(new Date() + req.url);
 
     res.writeHead(200, {'Content-Type': 'text/html'});
 
-  //   if(req.method == 'POST'){
-		// responseMessage(req);
-  //   }
+    if(req.method == 'POST'){
+		responseMessage(req);
+    }
     
-    //createEbookParsingJob("http://www.baidu.com");
     //whetherJobFinished("6d9b67ab-ba05-11e5-a6e2-002590d8633c");
-
-    sendEmail("tmp");
+    //createEbookParsingJob("http://www.baidu.com");
+    //sendEmail("tmp");
 
     responseEchostr(req, res);
 
@@ -68,7 +70,7 @@ function createEbookParsingJob(content_url){
             'source': content_url
         }],
         'conversion': [{
-            'target': 'pdf'
+            'target': convert_file_format
         }]
     });
     console.log("asdfa" + post_data);
@@ -137,8 +139,9 @@ function whetherJobFinished(job_id){
 }
 
 function downloadFile(file_address){
-    request(file_address).pipe(fs.createWriteStream("tmpfile"));
+    request(file_address).pipe(fs.createWriteStream(saved_file_name));
     console.log("File download to local disk");
+    sendEmail(saved_file_name);
 }
 
 function sendEmail(file){
