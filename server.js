@@ -146,7 +146,7 @@ function downloadFile(file_address){
     });
     res.on('finish', function(){
         console.log("File download to local disk");
-        file.close(funtion(){sendEmail(saved_file_name);});
+        file.close(function(){sendEmail(saved_file_name);});
     });
 }
 
