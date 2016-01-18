@@ -139,9 +139,15 @@ function whetherJobFinished(job_id){
 }
 
 function downloadFile(file_address){
-    request(file_address).pipe(fs.createWriteStream(saved_file_name));
-    console.log("File download to local disk");
-    sendEmail(saved_file_name);
+    var file = fs.createWriteStream(saved_file_name);
+    var res = request(file_address).pipe(file);
+    res.on('error', function(error){
+        console.log("Error happened when download file, with error: " + error)
+    });
+    res.on('finish', function(){
+        console.log("File download to local disk");
+        file.close(funtion(){sendEmail(saved_file_name);});
+    });
 }
 
 function sendEmail(file){
