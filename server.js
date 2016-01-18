@@ -13,7 +13,7 @@ var api_address = "api2.online-convert.com";
 var api_key = 'f0c315563b656b7d40101ac578fc289f';
 
 var convert_file_format = "mobi";
-var saved_file_name = tf.format("yyyyLLdd-HHmm") + "." + convert_file_format;
+var saved_file_name = tf.format("yyyy-LL-dd-HH-mm") + "." + convert_file_format;
 
 http.createServer(function(req, res) {
     console.log(new Date() + req.url);
